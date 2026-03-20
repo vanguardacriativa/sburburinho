@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Páscoa Cosmos 2026 — Burburinho Café</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#07001a;font-family:'DM Sans',sans-serif;color:#fff;}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+#stars span{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:tw var(--d) var(--dl) infinite;}
+@keyframes tw{0%,100%{opacity:0;transform:scale(.3);}50%{opacity:var(--op);transform:scale(1);}}
+#app{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;}
+
+/* TOP */
+.top{flex-shrink:0;z-index:10;}
+
+.top-cover{display:none;width:100%;aspect-ratio:1200/350;overflow:hidden;position:relative;}
+.top-cover img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.top-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,0,26,.08) 0%,rgba(7,0,26,.45) 100%);}
+
+.top-logo{display:none;justify-content:center;background:rgba(7,0,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:10px 16px 4px;border-bottom:1px solid rgba(255,255,255,.05);}
+.top-logo img{height:clamp(40px,8vw,64px);width:auto;display:block;}
+
+.nav-bar{background:rgba(7,0,26,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);}
+.nav-tabs{display:flex;overflow-x:auto;scrollbar-width:none;padding:0 8px;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.ntab{flex-shrink:0;padding:7px 12px 8px;font-size:9.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;}
+.ntab.on{color:#f5d080;border-bottom-color:#f5d080;}
+
+.scr{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
+.scr.on{display:flex;}
+
+/* CAROUSEL */
+.car-outer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.stage{position:relative;width:100%;flex:1;display:flex;align-items:center;justify-content:center;perspective:900px;overflow:visible;}
+
+@property --angle{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes spin{to{--angle:360deg;}}
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 10px 2px var(--glow),0 0 28px 4px var(--glow2),0 10px 36px rgba(0,0,0,.55);}
+  50%{box-shadow:0 0 24px 9px var(--glow),0 0 55px 16px var(--glow2),0 10px 36px rgba(0,0,0,.55);}
+}
+
+.ccard{position:absolute;width:clamp(172px,44vw,230px);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .5s cubic-bezier(.4,0,.2,1),filter .5s cubic-bezier(.4,0,.2,1),box-shadow .5s cubic-bezier(.4,0,.2,1);will-change:transform,opacity,filter;touch-action:pan-y;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 28px rgba(0,0,0,.5);}
+.ccard.center{border-color:transparent;animation:glowPulse 2.4s ease-in-out infinite;}
+.ccard.center::before{content:'';position:absolute;inset:-2px;z-index:-1;border-radius:18px;background:conic-gradient(from var(--angle),transparent 0deg,var(--glow) 55deg,rgba(255,255,255,.9) 90deg,transparent 150deg,var(--glow2) 210deg,rgba(255,255,255,.5) 250deg,transparent 330deg,var(--glow) 360deg);animation:spin 2.8s linear infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;padding:2px;}
+.ccard img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;}
+.cov{padding:10px 13px 14px;background:var(--bg);}
+.cov-glyph{font-size:13px;color:rgba(255,255,255,.65);line-height:1;margin-bottom:3px;}
+.cov-name{font-size:17px;font-weight:600;color:#fff;line-height:1;}
+.cov-sab{font-style:italic;font-size:11px;font-weight:300;color:rgba(255,255,255,.42);margin-top:3px;line-height:1.35;}
+.cov-price{font-size:12px;font-weight:500;margin-top:8px;color:#fff;}
+
+.cnav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);width:36px;height:36px;border-radius:50%;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;backdrop-filter:blur(6px);transition:background .18s;}
+.cnav:hover{background:rgba(255,255,255,.14);}
+#prev{left:5px;}#next{right:5px;}
+.cdots{flex-shrink:0;display:flex;gap:6px;justify-content:center;padding:8px 0 5px;}
+.cdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:all .22s;border:none;padding:0;}
+.cdot.on{background:#f5d080;width:16px;border-radius:3px;}
+
+/* PRODUCT LIST */
+.s2-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:8px 14px 7px;border-bottom:1px solid rgba(255,255,255,.06);}
+.s2-name{font-size:14px;font-weight:500;color:rgba(255,255,255,.75);}
+.s2-meta{font-size:9px;color:rgba(255,255,255,.28);margin-left:auto;letter-spacing:.04em;}
+.plist{flex:1;overflow-y:auto;padding:8px 10px 16px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent;}
+.pcard{border-radius:12px;overflow:hidden;display:flex;border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:transform .15s;}
+.pcard:active{transform:scale(.98);}
+.pi{flex-shrink:0;width:86px;aspect-ratio:4/5;overflow:hidden;}
+.pi img{width:100%;height:100%;object-fit:cover;display:block;}
+.pb{flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:2px;}
+.pt{display:flex;align-items:baseline;justify-content:space-between;gap:4px;}
+.psig{font-size:16px;font-weight:600;color:#fff;line-height:1;}
+.pgl{font-size:.72em;font-weight:400;opacity:.5;margin-right:3px;}
+.ppr{font-size:12px;font-weight:500;color:#fff;flex-shrink:0;}
+.psub{font-style:italic;font-size:10.5px;font-weight:300;color:rgba(255,255,255,.48);line-height:1.3;}
+.psab{font-size:11px;font-weight:400;color:rgba(255,255,255,.36);}
+.pdes{font-size:8.5px;font-weight:300;color:rgba(255,255,255,.26);line-height:1.55;margin-top:2px;}
+.pfoot{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.ppe{font-size:7.5px;color:rgba(255,255,255,.18);letter-spacing:.08em;text-transform:uppercase;}
+.pbadge{font-size:7px;padding:1px 5px;border-radius:6px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.28);}
+
+/* DETAIL */
+.dscroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.dscroll::-webkit-scrollbar{display:none;}
+.gal{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#000;touch-action:pan-y;}
+.gtrack{display:flex;height:100%;will-change:transform;transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.gslide{flex-shrink:0;width:100%;height:100%;}
+.gslide img{width:100%;height:100%;object-fit:cover;display:block;}
+.gdots{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;pointer-events:none;}
+.gdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.28);transition:all .22s;}
+.gdot.on{background:#fff;width:13px;border-radius:3px;}
+.ghint{position:absolute;bottom:26px;right:12px;font-size:8px;color:rgba(255,255,255,.28);letter-spacing:.08em;pointer-events:none;}
+.dbody{padding:16px 18px 100px;}
+.dcat{font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:rgba(255,255,255,.32);margin-bottom:6px;}
+.dsig-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.dsig{font-size:clamp(26px,7vw,40px);font-weight:700;color:#fff;line-height:1;}
+.dgl{font-size:clamp(20px,5vw,30px);line-height:1;opacity:.6;}
+.dsab{font-size:clamp(13px,3.5vw,15px);font-weight:400;color:rgba(255,255,255,.42);margin:4px 0 2px;}
+.dsub{font-style:italic;font-size:clamp(12px,3.2vw,14.5px);font-weight:300;color:rgba(255,255,255,.52);margin-bottom:14px;}
+.dhr{height:1px;background:rgba(255,255,255,.07);margin:12px 0;}
+.ddesc{font-size:clamp(13px,3.5vw,15px);font-weight:300;color:rgba(255,255,255,.65);line-height:1.85;}
+.dfoot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:16px;}
+.dpr{font-size:clamp(22px,6vw,32px);font-weight:600;color:#fff;}
+.dpe{font-size:8.5px;font-weight:400;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:uppercase;}
+.bback-d{display:block;margin:0 18px 28px;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.36);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;padding:10px 20px;border-radius:50px;transition:color .18s,border-color .18s;}
+.bback-d:hover{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.26);}
+
+/* WA */
+.wa{position:fixed;bottom:0;left:0;right:0;z-index:20;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(7,0,26,.98) 50%,transparent);display:none;}
+.wa.on{display:block;}
+.wa a{display:flex;align-items:center;justify-content:center;gap:9px;background:#25D366;color:#fff;text-decoration:none;font-size:13.5px;font-weight:600;letter-spacing:.04em;padding:13px 24px;border-radius:50px;box-shadow:0 4px 20px rgba(37,211,102,.3);transition:transform .15s;}
+.wa a:active{transform:scale(.97);}
+.wa a svg{width:19px;height:19px;fill:#fff;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="app">
+  <div class="top">
+    <div class="top-cover" id="top-cover">
+      <img src="imgs/capa.jpg" alt="Páscoa Cosmos 2026 — Burburinho Café">
+    </div>
+    <div class="top-logo" id="top-logo">
+      <img src="imgs/logo.png" alt="Páscoa Cosmos 2026">
+    </div>
+    <div class="nav-bar">
+      <div class="nav-tabs" id="nav-tabs"></div>
+    </div>
+  </div>
+
+  <div id="s1" class="scr on">
+    <div class="car-outer">
+      <div class="stage" id="stage"></div>
+      <button class="cnav" id="prev">‹</button>
+      <button class="cnav" id="next">›</button>
+    </div>
+    <div class="cdots" id="cdots"></div>
+  </div>
+
+  <div id="s2" class="scr">
+    <div class="s2-bar">
+      <div class="s2-name" id="s2-name"></div>
+      <div class="s2-meta" id="s2-meta"></div>
+    </div>
+    <div class="plist" id="plist"></div>
+  </div>
+
+  <div id="s3" class="scr">
+    <div class="dscroll" id="dscroll"></div>
+  </div>
+</div>
+
+<div class="wa" id="wa">
+  <a href="https://api.whatsapp.com/send/?phone=5585996206737&type=phone_number&app_absent=0&wame_ctl=1" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Compre aqui
+  </a>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

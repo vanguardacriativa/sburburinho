@@ -15,4 +15,4 @@ public/
 
 ---
 
-Desenvolvido pela **Vanguarda Criativa** para o Burburinho Café.
+Desenvolvido pela **Vanguarda Criativa** para a Burburinho Café.
